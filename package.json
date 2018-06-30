@@ -4,7 +4,7 @@
   "description": "Coding samples practice files",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
     "url": "https://github.com/shobhitsharma/cudcode/issues"
   },
   "homepage": "https://github.com/shobhitsharma/cudcode#readme",
-  "dependencies": {
-    "mocha": "5.2.0"
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^23.2.0"
   }
 }

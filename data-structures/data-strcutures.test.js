@@ -1,313 +1,5 @@
-'use strict';
-
-class List {
-  constructor() {
-    this.memory = [];
-    this.length = 0;
-  }
-
-  get(address) {
-    return this.memory[address];
-  }
-
-  push(value) {
-    this.memory[this.length] = value;
-    this.length++;
-  }
-
-  pop() {
-    if (this.length === 0) return;
-
-    let lastAddress = this.length - 1;
-    let value = this.memory[lastAddress];
-    delete this.memory[lastAddress];
-    this.length--;
-
-    return value;
-  }
-
-  unshift(value) {
-    let previous = value;
-
-    for (let address = 0; address < this.length; address++) {
-      let current = this.memory[address];
-      this.memory[address] = previous;
-      previous = current;
-    }
-
-    this.memory[this.length] = previous;
-    this.length++;
-  }
-
-  shift() {
-    if (this.length === 0) return;
-
-    let value = this.memory[0];
-
-    for (let address = 0; address < this.length - 1; address++) {
-      this.memory[address] = this.memory[address + 1];
-    }
-
-    delete this.memory[this.length - 1];
-    this.length--;
-
-    return value;
-  }
-}
-
-class HashTable {
-  constructor() {
-    this.memory = [];
-  }
-
-  hashKey(key) {
-    let hash = 0;
-    for (let index = 0; index < key.length; index++) {
-      let code = key.charCodeAt(index);
-      hash = ((hash << 5) - hash + code) | 0;
-    }
-    return hash;
-  }
-
-  get(key) {
-    let address = this.hashKey(key);
-    return this.memory[address];
-  }
-
-  set(key, value) {
-    let address = this.hashKey(key);
-    this.memory[address] = value;
-  }
-
-  remove(key) {
-    let address = this.hashKey(key);
-    if (this.memory[address]) {
-      delete this.memory[address];
-    }
-  }
-}
-
-class Stack {
-  constructor() {
-    this.list = [];
-    this.length = 0;
-  }
-
-  push(value) {
-    this.length++;
-    this.list.push(value);
-  }
-
-  pop() {
-    if (this.length === 0) return;
-
-    this.length--;
-    return this.list.pop();
-  }
-
-  peek() {
-    return this.list[this.length - 1];
-  }
-}
-
-class Queue {
-  constructor() {
-    this.list = [];
-    this.length = 0;
-  }
-
-  enqueue(value) {
-    this.length++;
-    this.list.push(value);
-  }
-
-  dequeue() {
-    if (this.length === 0) return;
-
-    this.length--;
-    return this.list.shift();
-  }
-
-  peek() {
-    return this.list[0];
-  }
-}
-
-class Graph {
-  constructor() {
-    this.nodes = [];
-  }
-
-  addNode(value) {
-    return this.nodes.push({
-      value,
-      lines: []
-    });
-  }
-
-  find(value) {
-    return this.nodes.find(node => {
-      return node.value === value;
-    });
-  }
-
-  addLine(startValue, endValue) {
-    let startNode = this.find(startValue);
-    let endNode = this.find(endValue);
-
-    if (!startNode || !endNode) {
-      throw new Error('Both nodes need to exist');
-    }
-
-    startNode.lines.push(endNode);
-  }
-}
-
-class LinkedList {
-  constructor() {
-    this.head = null;
-    this.length = 0;
-  }
-
-  get(position) {
-    if (position >= this.length) {
-      throw new Error('Position outside of list range');
-    }
-
-    let current = this.head;
-
-    for (let index = 0; index < position; index++) {
-      current = current.next;
-    }
-
-    return current;
-  }
-
-  add(value, position) {
-    let node = {
-      value,
-      next: null
-    };
-
-    if (position === 0) {
-      node.next = this.head;
-      this.head = node;
-    } else {
-      let prev = this.get(position - 1);
-      let current = prev.next;
-      node.next = current;
-      prev.next = node;
-    }
-
-    this.length++;
-  }
-
-  remove(position) {
-    if (!this.head) {
-      throw new Error('Removing from empty list');
-    }
-    if (position === 0) {
-      this.head = this.head.next;
-    } else {
-      let prev = this.get(position - 1);
-      prev.next = prev.next.next;
-    }
-
-    this.length--;
-  }
-}
-
-class Tree {
-  constructor() {
-    this.root = null;
-  }
-
-  traverse(callback) {
-    function walk(node) {
-      callback(node);
-      node.children.forEach(walk);
-    }
-
-    walk(this.root);
-  }
-
-  add(value, parentValue) {
-    let newNode = {
-      value,
-      children: []
-    };
-
-    if (this.root === null) {
-      this.root = newNode;
-      return;
-    }
-
-    this.traverse(node => {
-      if (node.value === parentValue) {
-        node.children.push(newNode);
-      }
-    });
-  }
-}
-
-class BinarySearchTree {
-  constructor() {
-    this.root = null;
-  }
-
-  contains(value) {
-    let current = this.root;
-
-    while (current) {
-      if (value > current.value) {
-        current = current.right;
-      } else if (value < current.value) {
-        current = current.left;
-      } else {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  add(value) {
-    let node = {
-      value: value,
-      left: null,
-      right: null
-    };
-
-    if (this.root === null) {
-      this.root = node;
-      return;
-    }
-
-    let current = this.root;
-
-    while (true) {
-      if (value > current.value) {
-        if (!current.right) {
-          current.right = node;
-          break;
-        }
-
-        current = current.right;
-      } else if (value < current.value) {
-        if (!current.left) {
-          current.left = node;
-          break;
-        }
-
-        current = current.left;
-      } else {
-        break;
-      }
-    }
-  }
-}
-
-module.exports = {
+const assert = require('assert');
+const {
   List,
   HashTable,
   Stack,
@@ -316,4 +8,152 @@ module.exports = {
   LinkedList,
   Tree,
   BinarySearchTree
-};
+} = require('./data-structures.js');
+
+describe('Data Structures', function() {
+  test('should validate Lists', done => {
+    let list = new List();
+
+    list.push(1);
+    list.unshift(2);
+
+    assert.equal(list.get(1), 1);
+    assert.equal(list.get(0), 2);
+
+    assert.equal(list.shift(), 2);
+    assert.equal(list.get(0), 1);
+
+    assert.equal(list.pop(), 1);
+    assert.equal(list.get(0), undefined);
+
+    done();
+  });
+
+  test('should validate Hash Table', done => {
+    var hashTable = new HashTable();
+
+    hashTable.set('foo', 'bar');
+    assert.equal(hashTable.get('foo'), 'bar');
+
+    hashTable.remove('foo');
+    assert.equal(hashTable.get('foo'), undefined);
+
+    done();
+  });
+
+  test('should validate Stack', done => {
+    var stack = new Stack();
+
+    stack.push(1);
+    stack.push(2);
+
+    assert.equal(stack.peek(), 2);
+    assert.equal(stack.pop(), 2);
+    assert.equal(stack.peek(), 1);
+    assert.equal(stack.pop(), 1);
+
+    done();
+  });
+
+  test('should validate Queue', done => {
+    var queue = new Queue();
+
+    queue.enqueue(1);
+    queue.enqueue(2);
+
+    assert.equal(queue.peek(), 1);
+    assert.equal(queue.dequeue(), 1);
+    assert.equal(queue.peek(), 2);
+    assert.equal(queue.dequeue(), 2);
+
+    done();
+  });
+
+  test('should validate Graph', done => {
+    var graph = new Graph();
+
+    graph.addNode(1);
+    graph.addNode(2);
+    graph.addNode(3);
+
+    assert.equal(graph.find(1).value, 1);
+    assert.equal(graph.find(2).value, 2);
+
+    graph.addLine(1, 2);
+    graph.addLine(1, 3);
+    graph.addLine(2, 3);
+
+    assert.equal(graph.find(1).lines[0].value, 2);
+    assert.equal(graph.find(1).lines[1].value, 3);
+    assert.equal(graph.find(2).lines[0].value, 3);
+
+    done();
+  });
+
+  test('should validate LinkedList', done => {
+    var linkedList = new LinkedList();
+
+    linkedList.add(1, 0);
+    linkedList.add(2, 1);
+    linkedList.add(3, 2);
+    linkedList.add(4, 3);
+
+    assert.equal(linkedList.get(0).value, 1);
+    assert.equal(linkedList.get(1).value, 2);
+
+    linkedList.remove(1);
+    assert.equal(linkedList.get(1).value, 3);
+
+    linkedList.remove(2);
+    assert.equal(linkedList.get(1).value, 3);
+
+    linkedList.remove(0);
+    assert.equal(linkedList.get(0).value, 3);
+
+    done();
+  });
+
+  test('should validate Tree', done => {
+    var tree = new Tree();
+
+    tree.add(1);
+    tree.add(2, 1);
+    tree.add(3, 1);
+    tree.add(4, 2);
+    tree.add(5, 2);
+
+    var traversed = [];
+    tree.traverse(function(node) {
+      traversed.push(node.value);
+    });
+
+    assert.deepEqual(traversed, [1, 2, 4, 5, 3]);
+    done();
+  });
+
+  test('should validate Binary Search Tree', done => {
+    var binarySearchTree = new BinarySearchTree();
+
+    // root
+    binarySearchTree.add(4);
+
+    // left side
+    binarySearchTree.add(2);
+    binarySearchTree.add(1);
+    binarySearchTree.add(3);
+
+    // right side
+    binarySearchTree.add(6);
+    binarySearchTree.add(5);
+    binarySearchTree.add(7);
+
+    assert.ok(binarySearchTree.contains(2));
+    assert.ok(binarySearchTree.contains(3));
+    assert.ok(binarySearchTree.contains(4));
+
+    // duplicate
+    binarySearchTree.add(6);
+
+    done();
+  });
+});
