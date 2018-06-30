@@ -1,0 +1,26 @@
+{
+  "name": "cudcode",
+  "version": "1.0.0",
+  "description": "Coding samples practice files",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shobhitsharma/cudcode.git"
+  },
+  "keywords": [
+    "cucode",
+    "testonly"
+  ],
+  "author": "Shobhit Sharma <ishobhitsharma@gmail.com> (https://shobh.it/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shobhitsharma/cudcode/issues"
+  },
+  "homepage": "https://github.com/shobhitsharma/cudcode#readme",
+  "dependencies": {
+    "mocha": "5.2.0"
+  }
+}
