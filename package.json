@@ -4,7 +4,8 @@
   "description": "Coding samples practice files",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:debug": "jest --runInBand --watch"
   },
   "repository": {
     "type": "git",
